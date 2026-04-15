@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'includes/config.php';
 
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header("Location: dashboard.php");
@@ -27,38 +28,40 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
                             <tr>
                                 <th class="ps-4 fw-medium border-0">NIM</th>
                                 <th class="fw-medium border-0">Nama Lengkap</th>
-                                <th class="fw-medium border-0">Program Studi</th>
-                                <th class="fw-medium border-0">Status</th>
+                                <th class="fw-medium border-0">Jurusan</th>
                                 <th class="text-end pe-4 fw-medium border-0">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="ps-4">20210001</td>
-                                <td><div class="fw-semibold text-dark">Ahmad Budiawan</div><div class="small text-muted">ahmad@student.edu</div></td>
-                                <td>Sistem Informasi</td>
-                                <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded-pill">Aktif</span></td>
-                                <td class="text-end pe-4">
-                                    <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger rounded-circle ms-1"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="ps-4">20210002</td>
-                                <td><div class="fw-semibold text-dark">Siti Aminah</div><div class="small text-muted">siti@student.edu</div></td>
-                                <td>Teknik Informatika</td>
-                                <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded-pill">Aktif</span></td>
-                                <td class="text-end pe-4">
-                                    <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger rounded-circle ms-1"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
+                            <?php
+                            $query = "SELECT * FROM mahasiswa ORDER BY nim ASC";
+                            $result = mysqli_query($koneksi, $query);
+
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td class='ps-4'>" . htmlspecialchars($row['nim']) . "</td>";
+                                    echo "<td>
+                                            <div class='fw-semibold text-dark'>" . htmlspecialchars($row['nama']) . "</div>
+                                            <div class='small text-muted'>" . htmlspecialchars($row['email']) . "</div>
+                                          </td>";
+                                    echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
+                                    echo "<td class='text-end pe-4'>
+                                            <button class='btn btn-sm btn-outline-primary rounded-circle'><i class='bi bi-pencil'></i></button>
+                                            <button class='btn btn-sm btn-outline-danger rounded-circle ms-1'><i class='bi bi-trash'></i></button>
+                                          </td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='4' class='text-center py-4'>Tidak ada data mahasiswa.</td></tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="card-footer bg-white border-top text-center py-3">
-                <span class="text-muted small">Menampilkan 2 dari 120 mahasiswa</span>
+                <span class="text-muted small">Menampilkan <?php echo mysqli_num_rows($result); ?> mahasiswa</span>
             </div>
         </div>
     </div>

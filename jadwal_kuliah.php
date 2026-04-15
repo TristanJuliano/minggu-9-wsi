@@ -1,5 +1,7 @@
 <?php
 session_start();
+// Menggunakan require_once untuk menyertakan file koneksi database
+require_once 'includes/config.php';
 
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'user') {
     header("Location: dashboard.php");
@@ -32,27 +34,25 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'user') {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="ps-4 fw-semibold text-dark">Senin</td>
-                                <td>08:00 - 10:30</td>
-                                <td>Pemrograman Web Lanjut</td>
-                                <td><span class="badge bg-light text-dark border">Lab Komputer A</span></td>
-                                <td>Budi Santoso, M.Kom</td>
-                            </tr>
-                            <tr>
-                                <td class="ps-4 fw-semibold text-dark">Senin</td>
-                                <td>11:00 - 13:00</td>
-                                <td>Basis Data</td>
-                                <td><span class="badge bg-light text-dark border">Ruang 302</span></td>
-                                <td>Siti Aminah, Ph.D</td>
-                            </tr>
-                            <tr>
-                                <td class="ps-4 fw-semibold text-dark">Selasa</td>
-                                <td>09:00 - 11:30</td>
-                                <td>Sistem Operasi</td>
-                                <td><span class="badge bg-light text-dark border">Ruang 201</span></td>
-                                <td>Andi Wirawan, M.T</td>
-                            </tr>
+                            <?php
+                            // Query untuk mengambil data jadwal kuliah
+                            $query = "SELECT * FROM jadwal_kuliah ORDER BY FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'), waktu ASC";
+                            $result = mysqli_query($koneksi, $query);
+
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td class='ps-4 fw-semibold text-dark'>" . htmlspecialchars($row['hari']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['waktu']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['mata_kuliah']) . "</td>";
+                                    echo "<td><span class='badge bg-light text-dark border'>" . htmlspecialchars($row['ruangan']) . "</span></td>";
+                                    echo "<td>" . htmlspecialchars($row['dosen']) . "</td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='5' class='text-center py-4'>Belum ada jadwal kuliah.</td></tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>

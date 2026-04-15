@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'includes/config.php';
 
 // Jika sudah login, langsung arahkan ke dashboard
 if (isset($_SESSION['username'])) {
@@ -9,24 +10,29 @@ if (isset($_SESSION['username'])) {
 
 $error = '';
 
-// Simulasi database sederhana
-$users = [
-    'admin' => ['password' => 'admin123', 'role' => 'admin'],
-    'user' => ['password' => 'user123', 'role' => 'user'],
-    'mahasiswa1' => ['password' => 'mhs123', 'role' => 'user']
-];
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    $username = mysqli_real_escape_string($koneksi, $_POST['username']);
     $password = $_POST['password'];
 
-    if (isset($users[$username]) && $users[$username]['password'] === $password) {
-        // Set Session
-        $_SESSION['username'] = $username;
-        $_SESSION['role'] = $users[$username]['role'];
+    // Query untuk mencari user berdasarkan username
+    $query = "SELECT * FROM users WHERE username = '$username'";
+    $result = mysqli_query($koneksi, $query);
+
+    if (mysqli_num_rows($result) === 1) {
+        $user = mysqli_fetch_assoc($result);
         
-        header("Location: dashboard.php");
-        exit;
+        // Verifikasi password (disini menggunakan perbandingan langsung untuk kemudahan contoh, 
+        // sebaiknya gunakan password_verify jika password di-hash)
+        if ($password === $user['password']) {
+            // Set Session
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+            
+            header("Location: dashboard.php");
+            exit;
+        } else {
+            $error = "Username atau password salah!";
+        }
     } else {
         $error = "Username atau password salah!";
     }
