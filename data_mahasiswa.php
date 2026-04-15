@@ -8,11 +8,11 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 }
 ?>
 
-<?php require_once 'includes/header.php'; ?>
-<?php require_once 'includes/navbar.php'; ?>
+<?php include 'includes/header.php'; ?>
+<?php include 'includes/navbar.php'; ?>
 
 <div class="wrapper">
-    <?php require_once 'includes/sidebar.php'; ?>
+    <?php include 'includes/sidebar.php'; ?>
 
     <div class="content">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -67,4 +67,4 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     </div>
 </div>
 
-<?php require_once 'includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?>
