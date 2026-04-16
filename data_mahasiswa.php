@@ -29,6 +29,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
                                 <th class="ps-4 fw-medium border-0">NIM</th>
                                 <th class="fw-medium border-0">Nama Lengkap</th>
                                 <th class="fw-medium border-0">Jurusan</th>
+                                <th class="fw-medium border-0">Angkatan</th>
                                 <th class="text-end pe-4 fw-medium border-0">Aksi</th>
                             </tr>
                         </thead>
@@ -46,6 +47,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
                                             <div class='small text-muted'>" . htmlspecialchars($row['email']) . "</div>
                                           </td>";
                                     echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['angkatan']) . "</td>";
                                     echo "<td class='text-end pe-4'>
                                             <button class='btn btn-sm btn-outline-primary rounded-circle'><i class='bi bi-pencil'></i></button>
                                             <button class='btn btn-sm btn-outline-danger rounded-circle ms-1'><i class='bi bi-trash'></i></button>
